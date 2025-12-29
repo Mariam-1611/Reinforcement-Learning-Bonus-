@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FrozenLake - RL Algorithms</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1 class="page-title">{{ env_name|capitalize }} Environment</h1>
+        
+        <!-- Environment Parameters -->
+        <div class="params-panel">
+            <h3>Environment Setup</h3>
+            <label>Rows: <input type="range" id="rows" min="3" max="8" value="4"> <span id="rows-val">4</span></label>
+            <label>Cols: <input type="range" id="cols" min="3" max="8" value="4"> <span id="cols-val">4</span></label>
+            {% if env_name == 'frozenlake' %}
+            <label>Slip: <input type="range" id="slip" min="0" max="0.5" step="0.05" value="0.2"> <span id="slip-val">0.2</span></label>
+            {% else %}
+            <label style="opacity:0.7;">Slip: <input type="range" id="slip" disabled> <span id="slip-val">-</span></label>
+            {% endif %}
+        </div>
+        <script>const envName = "{{ env_name }}";</script>
+
+        <!-- Algorithm Parameters -->
+        <div class="params-panel">
+            <h3>Algorithm Parameters</h3>
+            <label>γ (Discount): <input type="range" id="gamma" min="0.1" max="1" step="0.1" value="0.9"> <span id="gamma-val">0.9</span></label>
+            <label>θ (Tolerance): <input type="range" id="theta" min="0.0001" max="0.01" step="0.0001" value="0.0001"> <span id="theta-val">0.0001</span></label>
+            <label>Episodes (MC/TD): <input type="range" id="episodes" min="100" max="20000" step="100" value="2000"> <span id="episodes-val">2000</span></label>
+            <label style="display:flex; gap:6px; align-items:center;"><input id="trace" type="checkbox" style="margin-right:6px;"> Collect history (episode returns)</label>
+            <label>α (TD learning rate): <input type="range" id="alpha" min="0.01" max="1" step="0.01" value="0.1"> <span id="alpha-val">0.10</span></label>
+            <label>ε (TD epsilon): <input type="range" id="epsilon" min="0.0" max="1" step="0.01" value="0.10"> <span id="epsilon-val">0.10</span></label>
+        </div>
+
+        <!-- Algorithm Buttons -->
+        <div class="tabs">
+            <button class="tab-btn active" id="btn-policy" data-algo="policy_iteration" onclick="selectTab(this)">Policy Iteration</button>
+            <button class="tab-btn" id="btn-value" data-algo="value_iteration" onclick="selectTab(this)">Value Iteration</button>
+            <button class="tab-btn" id="btn-mce" data-algo="mc_every" onclick="selectTab(this)">MC Every-Visit</button>
+            <button class="tab-btn" id="btn-mcf" data-algo="mc_first" onclick="selectTab(this)">MC First-Visit</button>
+            <button class="tab-btn" id="btn-td" data-algo="td" onclick="selectTab(this)">TD(0)</button>
+            <button class="tab-btn" id="btn-simulate" style="margin-left:8px;" onclick="simulatePolicy()">Simulate (A)</button>
+            <div class="sim-controls" style="margin-left:12px; display:flex; gap:8px; align-items:center;">
+                <button class="btn" id="sim-play" onclick="playSimulation()">Play</button>
+                <button class="btn" id="sim-pause" onclick="pauseSimulation()">Pause</button>
+                <button class="btn" id="sim-step-back" onclick="stepBack()">◀︎</button>
+                <button class="btn" id="sim-step-fwd" onclick="stepForward()">▶︎</button>
+                <label style="margin:0 8px; font-size:13px; color:#c7d2fe">Speed</label>
+                <input id="sim-speed" type="range" min="100" max="1500" step="100" value="450">
+                <label style="margin-left:8px; font-size:13px; color:#c7d2fe">Random</label>
+                <input id="sim-stochastic" type="checkbox" title="Sample transitions stochastically">
+                <label style="margin-left:8px; font-size:13px; color:#c7d2fe">Use last policy</label>
+                <input id="use-last-policy" type="checkbox" checked title="Use the policy last computed on this page">
+            </div>
+        </div>
+
+        <!-- Visualization -->
+        <div id="viz-container" class="tab-content active">
+            <div class="viz-grid" id="grid"></div>
+
+            <div class="viz-row">
+                <div class="chart-container" style="flex:1;">
+                    <canvas id="valueChart"></canvas>
+                    <h4 style="margin-top:12px; color:#c7d2fe">Episode Returns</h4>
+                    <canvas id="episodeChart" style="height:120px; max-height:160px;"></canvas>
+                </div>
+
+                <div class="values-panel" style="width:300px;">
+                    <h4 style="margin-top:0; color:#c7d2fe">Values Preview</h4>
+                    <div id="values-panel-inner">
+                        <table id="values-grid" class="values-grid"></table>
+                    </div>
+                </div>
+
+                <div class="values-panel" style="width:300px;">
+                    <h4 style="margin-top:0; color:#c7d2fe">Rewards</h4>
+                    <div id="rewards-panel-inner">
+                        <table id="rewards-grid" class="values-grid"></table>
+                    </div>
+                </div>
+            </div>
+
+            <div id="iteration-control" style="margin-top:12px"></div>
+            <div class="stats-panel" id="stats">
+                <h3>Results</h3>
+                <p>Algorithm: <span id="algorithm-name">-</span></p>
+                <p>Iterations: <span id="iterations">-</span></p>
+                <p>Time: <span id="time-taken">-</span></p>
+                <p>Current reward: <span id="current-reward">0.00</span></p>
+                <p>Accumulated total: <span id="total-reward">0.00</span></p>
+                <p>TD α: <span id="alpha-stat">-</span>  ε: <span id="epsilon-stat">-</span></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

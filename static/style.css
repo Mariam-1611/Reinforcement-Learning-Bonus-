@@ -1,0 +1,235 @@
+/* static/style.css */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #0f172a 0%, #241f4a 100%); /* dark-blue to deep purple */
+    min-height: 100vh;
+    color: #e6eef8;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 30px 20px;
+}
+
+.page-title {
+    text-align: center;
+    font-size: 36px;
+    margin-bottom: 6px;
+    color: #e6eef8;
+    letter-spacing: 0.6px;
+}
+.hero-sub { text-align: center; color: #c7d2fe; margin-bottom: 18px; opacity: 0.95; }
+
+.hero {
+    background: linear-gradient(90deg, rgba(99,102,241,0.08), rgba(124,58,237,0.06));
+    padding: 28px;
+    border-radius: 14px;
+    box-shadow: 0 10px 30px rgba(37,99,235,0.06);
+}
+/* Environment Cards */
+.env-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin: 40px 0;
+    align-items: stretch;
+}
+
+.env-card {
+    background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
+    border-radius: 16px;
+    padding: 28px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(16,24,40,0.6);
+    transition: all 0.28s ease;
+    border: 1px solid rgba(255,255,255,0.06);
+    cursor: pointer;
+    color: #e6eef8;
+}
+
+.env-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 50px rgba(37,99,235,0.18);
+    border-color: rgba(99,102,241,0.18);
+}
+
+.rl-blue { background: linear-gradient(135deg, rgba(99,102,241,0.12), rgba(59,130,246,0.06)); }
+.rl-purple { background: linear-gradient(135deg, rgba(139,92,246,0.12), rgba(124,58,237,0.06)); }
+
+.env-icon {
+    font-size: 3.8rem;
+    margin-bottom: 18px;
+}
+
+.env-card h3 { font-size: 20px; margin-bottom: 6px; }
+.env-card p { font-size: 14px; opacity: 0.9; }
+
+/* Grid Visualization */
+.viz-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 70px);
+    gap: 6px;
+    margin: 30px auto;
+    padding: 22px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border-radius: 14px;
+    box-shadow: 0 8px 30px rgba(2,6,23,0.6);
+    position: relative; /* for absolutely positioned agent */
+}
+
+.cell {
+    width: 70px;
+    height: 70px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 18px;
+    border: 2px solid rgba(255,255,255,0.06);
+    transition: all 0.2s ease;
+    position: relative;
+    color: #e6eef8;
+}
+
+/* Agent marker */
+.agent {
+    position: absolute;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #06b6d4, #8b5cf6);
+    color: white;
+    font-weight: 800;
+    box-shadow: 0 6px 18px rgba(99,102,241,0.28);
+    transform: translateY(-6px);
+}
+
+/* FrozenLake Colors - softened blue/purple tones */
+.S { background: linear-gradient(135deg, #4f46e5, #7c3aed); color: white; }
+.F { background: linear-gradient(135deg, #e6f0ff, #dbe9ff); color: #0b2545; }
+.H { background: linear-gradient(135deg, #ef4444, #dc2626); color: white; }
+.G { background: linear-gradient(135deg, #06b6d4, #0891b2); color: white; }
+
+/* Policy Arrows */
+.arrow-up::after { content: '↑'; color: #c7d2fe; font-size: 24px; font-weight: 800; }
+.arrow-down::after { content: '↓'; color: #c7d2fe; font-size: 24px; font-weight: 800; }
+.arrow-left::after { content: '←'; color: #c7d2fe; font-size: 24px; font-weight: 800; }
+.arrow-right::after { content: '→'; color: #c7d2fe; font-size: 24px; font-weight: 800; }
+
+/* Buttons */
+.btn {
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    color: white;
+    border: none;
+    padding: 10px 26px;
+    border-radius: 22px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    margin: 4px;
+    box-shadow: 0 6px 20px rgba(99,102,241,0.18);
+}
+
+.btn:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(99,102,241,0.22); }
+
+.btn.active { background: linear-gradient(135deg, #4338ca, #7c3aed); }
+
+/* Parameters Panel */
+.params-panel {
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    padding: 22px;
+    border-radius: 14px;
+    margin: 20px 0;
+    box-shadow: 0 12px 30px rgba(2,6,23,0.6);
+}
+
+.params-panel label {
+    display: block;
+    margin: 12px 0;
+    font-weight: 600;
+    color: #c7d2fe;
+}
+
+/* Charts */
+.chart-container {
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    padding: 18px;
+    border-radius: 12px;
+    margin: 18px 0;
+    box-shadow: 0 10px 30px rgba(2,6,23,0.6);
+}
+
+.viz-row {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    margin-top: 18px;
+}
+
+.values-panel {
+    background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));
+    padding: 12px;
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(2,6,23,0.5);
+}
+
+.values-grid {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.values-grid td {
+    padding: 6px 8px;
+    text-align: center;
+    border: 1px solid rgba(255,255,255,0.04);
+    color: #c7d2fe;
+    font-weight: 700;
+    font-size: 12px;
+}
+
+.grid-empty { background: linear-gradient(135deg, #e6f0ff, #dbe9ff); color: #0b2545; }
+
+/* Tabs */
+.tabs {
+    display: flex;
+    margin: 20px 0;
+    background: rgba(255,255,255,0.02);
+    border-radius: 12px;
+    padding: 6px;
+}
+
+.tab-btn { flex: 1; padding: 12px; border: none; background: none; border-radius: 10px; cursor: pointer; font-weight: 600; color: #c7d2fe; }
+.tab-btn.active { background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white; }
+
+/* Stats panel */
+.stats-panel { color: #c7d2fe; background: rgba(255,255,255,0.01); padding: 12px; border-radius: 10px; }
+
+/* Visited reward cell highlight */
+#rewards-grid td.reward-visited {
+    font-weight: 800;
+    border: 1px solid rgba(255,255,255,0.06);
+    box-shadow: inset 0 0 6px rgba(0,0,0,0.14);
+    transition: background 0.18s ease, transform 0.12s ease;
+    transform: scale(1.02);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .viz-grid { grid-template-columns: repeat(4, 50px); }
+    .cell { width: 50px; height: 50px; font-size: 14px; }
+    .page-title { font-size: 28px; }
+}
